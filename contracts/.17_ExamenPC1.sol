@@ -36,5 +36,19 @@ contract Tienda_000227336 {
         console.log("Ejecutado por: 000227336 - Fabricio Adrian Ruiz Ponce");
         return elementos.length;
     }
+    function inactivarElementoTienda(uint _posicion) public logInvocador {
+        require(_posicion < elementos.length, "Posicion fuera de rango de elementos de la tienda");
+        elementos[_posicion].estado = false;
+    }
+    //Como mi ultimo dihgito termina en 7 me toca pintar el eleemento
+    function pintarElementosActivosTienda() public view logInvocador {
+        for (uint256 i = 0; i < elementos.length; i++) {
+            if (elementos[i].estado == true) {
+                console.log("Elemento de tienda activo: ", elementos[i].id, elementos[i].nombre);
+            }
+        }
+    }
+
+
 
 }
