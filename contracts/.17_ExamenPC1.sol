@@ -12,7 +12,10 @@ contract Tienda_000227336 {
         bool estado;
     }
 
-    Elemento[] public elementos;
+    uint256 public cantidad;
+
+    mapping(uint256 => Elemento) public elementos;
+
 
     modifier logInvocador() {
         console.log("Ejecutado por: 000227336 - Fabricio Adrian Ruiz Ponce");
@@ -25,30 +28,31 @@ contract Tienda_000227336 {
 
     address public dirContrato = 0x86cA07C6D491Ad7A535c26c5e35442f3e26e8497;
 
-    function agregarElementoTienda(uint256 _id, string memory _nombre, uint _costo, bool _estado) public logInvocador {
-        for (uint256 i = 0; i < elementos.length; i++) {
-            require(elementos[i].id != _id, "Elemento con ese ID ya existe"); 
-         }
+    function agregarElementoTienda(uint256 _id, string memory _nombre, uint256 _costo) public logInvocador {
+        require(elementos[_id].id != _id, "Elemento con ese ID ya existe");
         require(_costo > 0, "El costo debe ser mayor a cero");
-        elementos.push(Elemento(_id, _nombre, _costo, _estado));
+
+    
+        elementos[_id] = Elemento(_id, _nombre, _costo, true);
+    
+        cantidad++;
     }
-    function contarElementosTienda() public view logInvocador returns (uint256) {
-        console.log("Ejecutado por: 000227336 - Fabricio Adrian Ruiz Ponce");
-        return elementos.length;
+   function contarElementosTienda() public view logInvocador returns (uint256) {
+        return cantidad;
     }
-    function inactivarElementoTienda(uint _posicion) public logInvocador {
-        require(_posicion < elementos.length, "Posicion fuera de rango de elementos de la tienda");
-        elementos[_posicion].estado = false;
+
+    function inactivarElementoTienda(uint256 _id) public logInvocador {
+        require(elementos[_id].id == _id, "El ID ingresado no existe");
+        elementos[_id].estado = false;
     }
-    //Como mi ultimo dihgito termina en 7 me toca pintar el eleemento
-    function pintarElementosActivosTienda() public view logInvocador {
-        for (uint256 i = 0; i < elementos.length; i++) {
-            if (elementos[i].estado == true) {
-                console.log("Elemento de tienda activo: ", elementos[i].id, elementos[i].nombre);
+
+    //Como mi ultimo digito termina en 7 me toca pintar el elemento
+    function pintarElementosActivos(uint256[] memory _listaIds) public view logInvocador {
+        for (uint256 i = 0; i < _listaIds.length; i++) {
+            uint256 idActual = _listaIds[i];
+            if (elementos[idActual].estado == true && elementos[idActual].id == idActual) {
+                console.log("Elemento activo: ", elementos[idActual].id, elementos[idActual].nombre);
             }
         }
     }
-
-
-
 }
